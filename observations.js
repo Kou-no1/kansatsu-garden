@@ -340,14 +340,16 @@
       const series = [{plant, entries: records}];
       if (peer) series.push({plant: peer, entries: data.entries.filter(entry => entry.plantId === peer.id)});
       const last = records[0];
+      const destination = window.GardenRegions.forSpecies(plant.species);
+      const mapLink = destination ? '<a class="ob-map-link" href="#atlas/' + esc(destination.region.id) + '/' + esc(plant.species) + '">' + icon('globe', 15) + ' この植物を世界地図で見る</a>' : '';
       html += `<section class="ob-potbar"><label>${icon("sprout", 20)} 観察する鉢<select data-control="plant">${plants.map(p => `<option value="${esc(p.id)}"${p.id === plant.id ? " selected" : ""}>${esc(p.name)}（${conditions(p)}）</option>`).join("")}</select></label><button type="button" class="ob-outline" data-ob="plant">${icon("plus", 15)}鉢をふやす</button></section>
       <div class="ob-dashboard"><section class="ob-panel ob-graph-panel"><div class="ob-section-head"><h2>育ち方グラフ</h2>
       <div class="ob-segment" role="group" aria-label="グラフに表示するもの">${[["height", "草たけ"], ["leaves", "葉の数"]].map(([key, label]) => `<button type="button" data-metric="${key}" aria-pressed="${metric === key}">${label}</button>`).join("")}</div></div>
       <div class="ob-chart-legend">${series.map((s, i) => `<span><i class="ob-line ob-line-${i}"></i>${esc(s.plant.name)} <small>${conditions(s.plant)}</small></span>`).join("")}</div>
       ${graph(series)}
       ${peers.length ? `<label class="ob-compare">条件をくらべる<select data-control="peer"><option value="">くらべる鉢を選ぶ</option>${peers.map(p => `<option value="${esc(p.id)}"${p.id === comparisonId ? " selected" : ""}>${esc(p.name)}（${conditions(p)}）</option>`).join("")}</select></label>${peer && !series[1].entries.length ? '<p class="ob-muted">くらべる鉢には、まだ記録がありません。</p>' : ""}` : `<p class="ob-tip">同じ種類の鉢をふやすと、条件による育ち方のちがいをくらべられます。</p>`}</section>
-      <section class="ob-panel ob-latest"><h2>いまのすがた</h2><div class="ob-specimen">${last?.photo ? `<img src="${esc(last.photo)}" alt="${esc(plant.name)}の観察写真">` : `<div class="ob-specimen-art" style="--ob-plant-scale:${last ? Math.min(1.4, 0.45 + Math.log1p(last.height) * 0.21) : 0.4}">${plant.species === "other" ? icon("sprout", 72) : app().art(plant.species, !last || !last.height ? 0 : last.leaves < 4 ? 1 : 2)}</div>`}</div>
-        <h3>${esc(plant.name)}</h3><p class="ob-muted">${conditions(plant)}</p><dl class="ob-readout"><div><dt>草たけ</dt><dd>${last?.height ?? "－"} <small>cm</small></dd></div><div><dt>葉の数</dt><dd>${last?.leaves ?? "－"} <small>枚</small></dd></div></dl></section></div>
+      <section class="ob-panel ob-latest"><h2>いまのすがた</h2><div class="ob-specimen">${last?.photo ? `<img src="${esc(last.photo)}" alt="${esc(plant.name)}の観察写真">` : app().measuredPlant(plant, app().measurementScale(plants))}</div>
+        <h3>${esc(plant.name)}</h3><p class="ob-muted">${conditions(plant)}</p><dl class="ob-readout"><div><dt>草たけ</dt><dd>${last?.height ?? "－"} <small>cm</small></dd></div><div><dt>葉の数</dt><dd>${last?.leaves ?? "－"} <small>枚</small></dd></div></dl>${mapLink}</section></div>
       <section class="ob-panel ob-history"><div class="ob-section-head"><h2>観察の記録</h2><span>${records.length} 件</span></div>${records.length ? records.map(row => `<article class="ob-entry">
         <div class="ob-entry-day"><span>${esc(row.date.slice(0, 4))}</span><strong>${dateLabel(row.date)}</strong></div>
         ${row.photo ? `<button class="ob-thumb" type="button" data-photo="${esc(row.id)}" aria-label="${dateLabel(row.date)}の写真をひらく"><img src="${esc(row.photo)}" alt="" loading="lazy"></button>` : ""}

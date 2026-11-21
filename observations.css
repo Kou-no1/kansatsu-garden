@@ -117,8 +117,9 @@
 .ob-latest h3 { margin-top: 6px; font-size: 16px; overflow-wrap: anywhere; }
 .ob-specimen { background: #eef3e6; min-height: 112px; height: 142px; border-radius: 12px; margin-top: 14px; display: grid; place-items: center; overflow: hidden; }
 .ob-specimen > img { width: 100%; height: 100%; object-fit: contain; }
-.ob-specimen-art { height: min(100%, 124px); width: 124px; max-width: 100%; display: grid; place-items: center; }
-.ob-specimen-art :is(img,svg) { width: 82%; height: 82%; object-fit: contain; transform: scale(var(--ob-plant-scale)); }
+.ob-specimen { position:relative; }
+.ob-specimen .measure-garden { top:23px; }
+.ob-map-link { margin-top:12px; display:inline-flex; gap:6px; align-items:center; color:var(--ob-green); font-size:13px; text-underline-offset:3px; }
 .ob-readout { margin-top: 12px!important; display: grid; grid-template-columns: repeat(2,1fr); border-top: 1px solid var(--ob-border); padding-top: 10px; gap: 12px; }
 .ob-readout dt { color: var(--ob-muted); font-size: 12px; }
 .ob-readout dd { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }

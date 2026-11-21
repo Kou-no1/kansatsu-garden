@@ -1,0 +1,54 @@
+.ex-passport,.ex-challenge { color:#344c39; border:1px solid #ced8c4; border-radius:17px; background:#fcfcf4; padding:clamp(15px,2vw,25px); }
+.ex-passport { background:linear-gradient(100deg,#fffcf1,#f7f4e6); border-color:#d9d3bb; }
+.ex-title { display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center; justify-content:space-between; }
+.ex-title h2 { display:flex; align-items:center; gap:8px; margin:0; font-size:clamp(18px,2vw,24px); line-height:1.4; }
+.ex-title>span { color:#52614d; font-size:13px; font-weight:750; }
+.ex-passport>p,.ex-challenge p { font-size:14px; line-height:1.75; color:#4f5d4d; }
+.ex-passport>p { margin:5px 0 0; }
+.ex-stamps { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:clamp(7px,1.4vw,17px); margin-top:16px; }
+.ex-asia { --ex-ink:#5a7338; --ex-tint:#eef1d9; }
+.ex-africa { --ex-ink:#9b612f; --ex-tint:#f7ead2; }
+.ex-europe { --ex-ink:#5d6787; --ex-tint:#e8ebf1; }
+.ex-north-america { --ex-ink:#94734d; --ex-tint:#f1e9d8; }
+.ex-south-america { --ex-ink:#317b69; --ex-tint:#e0efe4; }
+.ex-oceania { --ex-ink:#477c8d; --ex-tint:#e4efef; }
+.ex-stamp { display:grid; align-content:center; justify-items:center; gap:3px; min-width:0; text-align:center; text-decoration:none; padding:12px 4px 9px; color:#606854; border:1px dashed #c7c5ac; border-radius:6px; background:#fcfaee; }
+.ex-stamp:hover,.ex-stamp:focus-visible { border-color:var(--ex-ink); background:var(--ex-tint); }
+.ex-imprint { display:grid; place-items:center; width:61px; max-width:100%; aspect-ratio:1; color:#95947f; border:1px dashed #bcbba5; border-radius:50%; }
+.ex-imprint img,.ex-result-picture img { width:88%; height:88%; object-fit:contain; }
+.ex-stamp strong { font-size:14px; overflow-wrap:anywhere; }
+.ex-stamp small { font-size:11px; }
+.ex-earned { color:var(--ex-ink); background:var(--ex-tint); border:1px solid color-mix(in srgb,var(--ex-ink) 55%,white); }
+.ex-earned .ex-imprint,.ex-result-picture { border:3px double var(--ex-ink); background:#ffffff88; }
+.ex-clue { margin:14px 0; padding:12px 15px; border-left:3px solid #a9b887; background:#f1f3e7; }
+.ex-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; padding:0; margin:0; min-width:0; border:0; }
+.ex-options legend { display:block; margin-bottom:8px; font-weight:750; font-size:15px; }
+.ex-options button { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-width:0; padding:10px 6px; border:1px solid #c5d4b8; border-radius:12px; background:#fffef8; font-weight:750; color:#3c583d; font-size:14px; line-height:1.4; cursor:pointer; }
+.ex-options button:hover { background:#f0f4e8; }
+.ex-options button[aria-disabled=true] { border-style:dashed; background:#f1f0e8; color:#68705f; cursor:default; }
+.ex-options button[aria-disabled=true] img { opacity:.55; }
+.ex-option-art { display:grid; place-items:center; height:65px; width:100%; }
+.ex-option-art img { width:100%; height:100%; object-fit:contain; min-height:0; }
+.ex-feedback:not(:empty) { margin:9px 0 0; color:#72532b; font-weight:650; }
+.ex-feedback:empty { display:none; }
+.ex-result { display:flex; align-items:center; gap:18px; margin-top:16px; }
+.ex-result h3 { font-size:18px; margin:0 0 3px; }
+.ex-result h3:focus,.ex-options legend:focus { outline:none; }
+.ex-result-picture { display:grid; place-items:center; flex:none; width:clamp(62px,9vw,100px); aspect-ratio:1; border-radius:50%; background:var(--ex-tint); }
+.ex-result-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.ex-result-actions button { display:inline-flex; justify-content:center; align-items:center; gap:5px; min-height:38px; padding:7px 11px; border:1px solid #b6c9ae; border-radius:9px; background:#f5f6eb; color:#3d5c41; font-size:13px; font-weight:750; }
+.ex-result-actions [data-ex-care] { color:white; background:#3f6948; border-color:#3f6948; }
+.ex-passport .ex-storage-note,.ex-challenge .ex-storage-note { color:#765329; font-size:12px; margin-top:8px; }
+@media(max-width:760px) {
+  .ex-stamps { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:540px) {
+  .ex-options { gap:5px; }
+  .ex-options button,.ex-stamp strong { font-size:12px; }
+  .ex-option-art { height:52px; }
+  .ex-result { align-items:flex-start; gap:9px; }
+  .ex-result-picture { width:52px; }
+  .ex-stamps { gap:6px; }
+  .ex-stamp { padding-top:7px; }
+  .ex-imprint { width:48px; }
+}

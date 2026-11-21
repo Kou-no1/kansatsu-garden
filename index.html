@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7ef">
+  <meta name="description" content="学校の植物を観察して、毎日の成長を記録しよう。小さな植物キャラといっしょに育つ、わたしの庭。">
+  <title>かんさつガーデン｜マイガーデン</title>
+  <link rel="icon" href="assets/garden-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="garden.css">
+  <link rel="stylesheet" href="observations.css">
+  <link rel="stylesheet" href="virtual.css">
+  <script defer src="species.js"></script>
+  <script defer src="icons.js"></script>
+  <script defer src="observations.js"></script>
+  <script defer src="virtual.js"></script>
+  <script defer src="garden.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へ移動</a>
+  <header class="masthead">
+    <div class="mast-inner">
+      <a class="brand" href="#garden">
+        <img src="assets/garden-mark.svg" width="46" height="46" alt="">
+        <span>かんさつガーデン<small>OBSERVATION GARDEN</small></span>
+      </a>
+      <nav class="main-nav" aria-label="メインメニュー">
+        <a href="#garden" data-page="garden"><span data-icon="fence"></span>マイガーデン</a>
+        <a href="#notebook" data-page="notebook"><span data-icon="notebook"></span>かんさつノート</a>
+        <a href="#book" data-page="book"><span data-icon="book"></span>植物ずかん</a>
+      </nav>
+      <button type="button" class="help-button" id="help"><span data-icon="help"></span><span>あそびかた</span></button>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <dialog id="garden-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-head"><h2 id="dialog-title"></h2><button id="close-dialog" class="circle-button" aria-label="閉じる" type="button"><span data-icon="x"></span></button></div>
+    <div id="dialog-body"></div>
+  </dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript><p>かんさつガーデンで遊ぶには、ブラウザーの JavaScript を有効にしてください。</p></noscript>
+</body>
+</html>

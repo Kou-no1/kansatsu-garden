@@ -2,6 +2,7 @@
   'use strict';
   const main = document.getElementById('main');
   const dialog = document.getElementById('garden-dialog');
+  const dialogHead = dialog.querySelector('.dialog-head');
   const dialogBody = document.getElementById('dialog-body');
   const toastBox = document.getElementById('toast');
   const icon = window.gardenIcon;
@@ -31,7 +32,10 @@
     if (!dialog.open) launchFocus = document.activeElement;
     document.getElementById('dialog-title').textContent = title;
     dialogBody.innerHTML = html;
-    if (!dialog.open) dialog.showModal();
+    if (!dialog.open) {
+      dialogHead.append(toastBox);
+      dialog.showModal();
+    }
     document.body.classList.add('showing-dialog');
     dialog.scrollTop = 0;
     document.getElementById('close-dialog').focus({preventScroll:true});
@@ -255,6 +259,8 @@
     if (event.clientX<rect.left || event.clientX>rect.right || event.clientY<rect.top || event.clientY>rect.bottom) closeModal();
   });
   dialog.addEventListener('close',()=>{
+    if (dialog.open) return;
+    document.body.append(toastBox);
     document.body.classList.remove('showing-dialog');
     if (launchFocus?.isConnected) launchFocus.focus({preventScroll:true});
     else document.querySelector('[aria-current="page"]')?.focus({preventScroll:true});

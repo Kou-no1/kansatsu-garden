@@ -9,12 +9,7 @@
 .jp-label::before { content:""; position:absolute; inset:-6px -3px; border-radius:30px; }
 .jp-label i { flex:none; width:8px; height:8px; border-radius:50%; border:1px solid #30493738; background:var(--jp-color); }
 .jp-label:hover,.jp-label[aria-current],.jp-label:focus-visible { z-index:2; color:#fffdf0; border-color:#375d43; background:#375d43; }
-.jp-site-dot { position:absolute; z-index:3; width:1px; height:1px; color:#784621; pointer-events:none; }
-.jp-site-dot i { position:absolute; top:0; left:0; width:12px; height:12px; transform:translate(-50%,-50%); border-radius:50%; border:2px solid #fff9e5; background:#a9552e; box-shadow:0 0 0 1px #97592e,0 0 0 5px #a15d2738; }
-.jp-site-dot strong { position:absolute; width:max-content; left:8px; bottom:7px; padding:3px 7px; border:1px solid #ab7952; border-radius:7px; background:#fff2d6; color:#653c25; font-size:clamp(11px,1vw,14px); font-weight:800; }
-.jp-site-dot .jp-site-left { left:auto; right:8px; }
-.jp-site-dot .jp-site-below { top:7px; bottom:auto; }
-.jp-map-foot { display:flex; flex-wrap:wrap; gap:3px 12px; align-items:center; justify-content:space-between; padding:6px 14px; font-size:11px; color:#4a6760; background:#eef5eebf; }
+.jp-map-foot { display:flex; flex-wrap:wrap; gap:4px 12px; align-items:center; justify-content:space-between; padding:6px 14px; font-size:12px; color:#425c55; background:#eef5ee; }
 .jp-map-foot > span { font-weight:650; }
 .jp-map-foot a { color:inherit; text-underline-offset:2px; }
 .jp-side { display:flex; flex-direction:column; justify-content:center; gap:11px; padding:15px 18px; border-left:1px solid var(--jp-line); background:#fffdf5; }
@@ -46,10 +41,9 @@
   .jp-sample { width:25px; height:25px; }
 }
 @media(max-width:560px) {
-  .jp-label { font-size:clamp(10px,2.65vw,13px); padding:3px 5px; gap:3px; }
+  .jp-label { font-size:clamp(12px,2.65vw,13px); padding:3px 5px; gap:3px; }
   .jp-label i { width:5px; height:5px; }
-  .jp-site-dot strong { font-size:10px; padding:2px 4px; }
-  .jp-map-foot { padding:5px 9px; font-size:10px; }
+  .jp-map-foot { padding:6px 9px; }
   .jp-region-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .jp-region-row { position:relative; }
   .jp-region-row strong { white-space:nowrap; }

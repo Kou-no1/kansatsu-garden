@@ -1,7 +1,7 @@
 // Change the release when the app is published so existing gardens get a fresh offline copy.
 const scope = new URL(self.registration.scope);
 const cachePrefix = 'kansatsu-garden:' + encodeURIComponent(scope.pathname) + ':';
-const cacheName = cachePrefix + '2026-11-22.2';
+const cacheName = cachePrefix + '2026-11-22.3';
 const indexURL = new URL('index.html', scope).href;
 
 const plantPictures = [

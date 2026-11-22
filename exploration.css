@@ -22,8 +22,8 @@
 .ex-imprint { display:grid; place-items:center; width:61px; max-width:100%; aspect-ratio:1; color:#95947f; border:1px dashed #bcbba5; border-radius:50%; }
 .ex-imprint img,.ex-result-picture img { width:88%; height:88%; object-fit:contain; }
 .ex-stamp strong { font-size:14px; overflow-wrap:anywhere; }
-.ex-stamp small { font-size:11px; }
-.ex-earned { color:var(--ex-ink); background:var(--ex-tint); border:1px solid color-mix(in srgb,var(--ex-ink) 55%,white); }
+.ex-stamp small { font-size:12px; }
+.ex-earned { color:#414b3b; color:color-mix(in srgb,var(--ex-ink) 78%,#182016); background:var(--ex-tint); border:1px solid color-mix(in srgb,var(--ex-ink) 55%,white); }
 .ex-earned .ex-imprint,.ex-result-picture { border:3px double var(--ex-ink); background:#ffffff88; }
 .ex-clue { margin:14px 0; padding:12px 15px; border-left:3px solid #a9b887; background:#f1f3e7; }
 .ex-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; padding:0; margin:0; min-width:0; border:0; }

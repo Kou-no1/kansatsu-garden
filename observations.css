@@ -78,7 +78,7 @@
   max-width: 100%;
   background: #fffefa;
   color: var(--ob-ink);
-  border: 1px solid #c8d3c6;
+  border: 1px solid #788773;
   border-radius: 9px;
   padding: 9px 11px;
   font: inherit;
@@ -94,8 +94,25 @@
 .ob-chart-legend small { font-weight: 500; color: var(--ob-muted); }
 .ob-line { width: 16px; border-top: 3px solid #417652; }
 .ob-line-1 { border-top: 3px dashed #ab652d; }
+.ob-graph-panel { container-type: inline-size; }
 .ob-chart { display: block; width: 100%; height: auto; overflow: visible; font-family: inherit; margin-bottom: 10px; }
-.ob-chart text { fill: #646f65; font-size: 11px; font-variant-numeric: tabular-nums; }
+.ob-chart text { fill: #46574a; font-size: 13px; font-variant-numeric: tabular-nums; }
+.ob-chart > text:first-child { transform: translateX(38px); }
+/* Labels scale with the SVG viewBox. Compensate when the plot gets narrow. */
+@container (max-width: 519px) {
+  .ob-chart { margin: 0 0 22px 14px; width: calc(100% - 14px); }
+  .ob-chart text { font-size: 16px; }
+  .ob-chart text[text-anchor="middle"] { transform: translateY(18px); }
+}
+@container (max-width: 410px) {
+  .ob-chart text { font-size: 20px; }
+}
+@container (max-width: 340px) {
+  .ob-chart text { font-size: 23px; }
+}
+@container (max-width: 290px) {
+  .ob-chart text { font-size: 27px; }
+}
 .ob-gridline { stroke: #e4e8de; stroke-width: 1; }
 .ob-series { color: #417652; }
 .ob-series-b { color: #ab652d; }
@@ -131,7 +148,7 @@
 .ob-entry-day span { font-variant-numeric: tabular-nums; font-size: 11px; color: var(--ob-muted); }
 .ob-entry-day strong, .ob-entry-text strong { font-size: 13px; }
 .ob-entry-text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.ob-entry-text em { color: #9ba997; font-style: normal; margin: 0 3px; }
+.ob-entry-text em { color: var(--ob-muted); font-style: normal; margin: 0 3px; }
 .ob-entry-text p, .ob-photo-detail p { white-space: pre-wrap; color: var(--ob-muted); font-size: 13px; line-height: 1.6; }
 .ob-thumb { flex: 0 0 46px; height: 46px; padding: 0; border: 0; background: #edf2e6; border-radius: 7px; overflow: hidden; cursor: pointer; }
 .ob-thumb img { width: 100%; height: 100%; object-fit: cover; }

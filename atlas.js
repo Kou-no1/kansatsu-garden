@@ -80,13 +80,15 @@
 
   function drawSite(view, region) {
     const layer = view.querySelector('.at-site-layer');
+    const caption = view.querySelector('.at-site-caption');
     const site = region?.plants.find(item => item.id === shownSite);
-    layer.innerHTML = '';
-    if (!site || !validCoords(site)) return;
-    const point = project(site.lon, site.lat);
-    layer.innerHTML = '<span class="at-location' + (point.x > 60 ? ' at-label-left' : '') +
-      '" style="' + position(site) + '"><i></i><strong>' + esc(plantInfo(site).name) +
-      '<small>' + esc(site.place) + '</small></strong></span>';
+    if (!site || !validCoords(site)) {
+      layer.replaceChildren();
+      caption.replaceChildren();
+      return;
+    }
+    layer.innerHTML = '<span class="at-location" style="' + position(site) + '"></span>';
+    caption.textContent = region.name + '　' + plantInfo(site).name + '（' + site.place + '）';
   }
 
   function focusRegion(view) {
@@ -114,8 +116,8 @@
       '<div class="at-map" role="group" tabindex="-1" aria-label="世界地図の地域ピン">' +
       '<img class="at-map-land" src="assets/world-land.svg" width="1000" height="480" alt="">' +
       regions.map(region => regionPin(region, selected)).join('') +
-      '<div class="at-site-layer" aria-live="polite"></div></div>' +
-      '<div class="at-credit">地図データ <a href="https://www.naturalearthdata.com/downloads/110m-physical-vectors/110m-land/" target="_blank" rel="noopener noreferrer">Natural Earth</a></div></div>' +
+      '<div class="at-site-layer" aria-hidden="true"></div></div>' +
+      '<div class="at-map-foot"><span class="at-site-caption" aria-live="polite"></span><span class="at-credit">地図データ <a href="https://www.naturalearthdata.com/downloads/110m-physical-vectors/110m-land/" target="_blank" rel="noopener noreferrer">Natural Earth</a></span></div></div>' +
       '<nav class="at-regions" aria-label="探検する地域"><div class="at-nav-heading"><h2>探検する地域</h2><span>全' + count + '種</span></div>' +
       '<div class="at-region-list">' + regions.map(region => regionLink(region, selected)).join('') +
       '</div></nav></section>' +

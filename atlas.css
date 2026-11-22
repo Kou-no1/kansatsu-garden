@@ -8,10 +8,11 @@
 .at-trip-count { display:flex; align-items:center; flex:none; gap:8px; border:1px solid #cbd6bb; border-radius:12px; padding:9px 13px; background:#ecf1e3; color:#4a6448; font-size:13px; font-weight:700; }
 .at-trip-count b { font-variant-numeric:tabular-nums; }
 .at-map-panel { display:grid; grid-template-columns:minmax(0,1fr) clamp(206px,22%,265px); overflow:hidden; border:1px solid #cfd7c8; border-radius:20px; background:#fbfaf1; box-shadow:0 3px 0 #4b593308; }
-.at-map-column { position:relative; display:flex; flex-direction:column; justify-content:center; min-width:0; padding:16px 13px 30px; background:radial-gradient(ellipse at 65% 25%,#faf7e4 2%,#f4f3df 65%,#e9eddf); }
+.at-map-column { display:flex; flex-direction:column; justify-content:center; min-width:0; padding:16px 13px 8px; background:radial-gradient(ellipse at 65% 25%,#faf7e4 2%,#f4f3df 65%,#e9eddf); }
 .at-map { position:relative; width:100%; isolation:isolate; aspect-ratio:1000 / 480; }
 .at-map-land { display:block; width:100%; height:100%; }
-.at-credit { position:absolute; right:19px; bottom:10px; color:#657262; font-size:11px; }
+.at-map-foot { display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; margin-top:8px; padding:6px 8px; background:#f8f8ed; border-radius:7px; }
+.at-credit { margin-left:auto; color:#4d604f; font-size:12px; }
 .at-credit a { color:inherit; text-underline-offset:.16em; }
 .at-pin { position:absolute; z-index:1; display:flex; width:36px; height:36px; align-items:center; justify-content:center; transform:translate(-50%,-50%); color:#36583e; text-decoration:none; border-radius:50%; }
 .at-pin-dot { display:grid; place-items:center; width:23px; height:23px; border:2px solid #fdfdf0; border-radius:50%; background:#517b5e; color:#fff; outline:1px solid #617d59; box-shadow:0 2px 4px #30483738; }
@@ -21,12 +22,13 @@
 .at-pin:hover, .at-pin:focus-visible, .at-pin-active { z-index:2; }
 .at-pin:hover .at-pin-dot, .at-pin:focus-visible .at-pin-dot, .at-pin-active .at-pin-dot { background:#ae6b34; outline-color:#a36431; }
 .at-pin-active .at-pin-name { background:#ffebc6; color:#714a24; }
+.at-pin[data-at-region="oceania"] .at-pin-name { left:auto; right:0; transform:none; }
+.at-map:has(.at-location) .at-pin-active .at-pin-name { display:none; }
 .at-site-layer { position:absolute; z-index:3; inset:0; pointer-events:none; }
-.at-location { position:absolute; width:1px; height:1px; color:#69381f; }
-.at-location i { position:absolute; top:0; left:0; width:10px; height:10px; transform:translate(-50%,-50%); background:#b56335; border:2px solid #fff5d7; border-radius:50%; outline:1px solid #814d2a; box-shadow:0 0 0 5px #bc784b33; }
-.at-location strong { position:absolute; left:8px; bottom:7px; width:max-content; max-width:180px; padding:5px 7px; border:1px solid #b7976c; border-radius:8px; background:#fff9e9; font-size:13px; line-height:1.4; box-shadow:0 2px 6px #40332020; }
-.at-label-left strong { left:auto; right:8px; }
-.at-location small { display:block; font-size:11px; font-weight:600; }
+.at-location,.at-site-caption:not(:empty)::before { box-sizing:border-box; width:12px; height:12px; background:#a65429; border:2px solid #fff9e5; border-radius:50%; outline:1px solid #814d2a; }
+.at-location { position:absolute; z-index:3; transform:translate(-50%,-50%); box-shadow:0 0 0 4px #bc784b33; pointer-events:none; }
+.at-site-caption { display:flex; align-items:center; gap:7px; color:#593e28; font-size:13px; line-height:1.5; font-weight:700; }
+.at-site-caption:not(:empty)::before { content:""; flex:none; }
 .at-regions { display:flex; flex-direction:column; justify-content:center; gap:10px; padding:17px; border-left:1px solid var(--at-border); background:#fffdf4; }
 .at-nav-heading { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
 .at-nav-heading h2 { font-size:17px; font-weight:800; }
@@ -72,8 +74,7 @@ button.at-place { cursor:pointer; text-decoration:underline; text-decoration-col
 @media(max-width:800px) {
   .at-page { gap:16px; }
   .at-map-panel { grid-template-columns:1fr; }
-  .at-map-column { padding:8px 10px 21px; }
-  .at-credit { bottom:4px; right:12px; font-size:10px; }
+  .at-map-column { padding:8px 10px 5px; }
   .at-regions { padding:11px 14px 13px; border-left:0; border-top:1px solid var(--at-border); gap:7px; }
   .at-region-list { grid-template-columns:repeat(3,minmax(0,1fr)); }
   .at-region-link { min-height:36px; background:#f3f4e9; }
@@ -84,15 +85,13 @@ button.at-place { cursor:pointer; text-decoration:underline; text-decoration-col
   .at-header p, .at-detail-head p { font-size:14px; }
   .at-trip-count { padding:5px 9px; font-size:12px; }
   .at-map-panel { border-radius:15px; }
-  .at-map-column { padding:8px 2px 18px; }
+  .at-map-column { padding:8px 2px 3px; }
   .at-pin { width:28px; height:28px; }
   .at-pin-dot { width:17px; height:17px; border-width:1.5px; }
   .at-pin-dot .ui-icon { width:12px; height:12px; }
   .at-pin-specimen { width:25px; height:25px; }
   .at-pin-name { display:none; }
-  .at-pin-active .at-pin-name { display:block; font-size:10px; top:22px; }
-  .at-location strong { max-width:104px; font-size:11px; }
-  .at-location small { font-size:10px; }
+  .at-pin-active .at-pin-name { display:block; font-size:12px; top:22px; }
   .at-regions { padding:10px; }
   .at-region-list { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .at-region-link { padding:4px 6px; gap:5px; }

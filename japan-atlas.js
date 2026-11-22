@@ -15,10 +15,10 @@
     tohoku: {point:[140.75,39.45], label:[548,194], sample:'beech', color:'#bfca83'},
     kanto: {point:[139.60,36.18], label:[535,306], sample:'morning-lotus', color:'#e7bd87'},
     chubu: {point:[137.75,36.04], label:[381,217], sample:'wasabi', color:'#e0ce88'},
-    kinki: {point:[135.73,34.87], label:[383,355], sample:'tea', color:'#c4abc8'},
+    kinki: {point:[135.73,34.87], label:[393,419], sample:'tea', color:'#c4abc8'},
     chugoku: {point:[133.02,34.89], label:[202,247], sample:'camellia', color:'#adc6cf'},
-    shikoku: {point:[133.65,33.78], label:[236,392], sample:'sudachi', color:'#dba694'},
-    kyushu: {point:[130.92,32.55], label:[89,399], sample:'mangrove', color:'#acc48d'}
+    shikoku: {point:[133.65,33.78], label:[236,429], sample:'sudachi', color:'#dba694'},
+    kyushu: {point:[130.92,32.55], label:[116,354], sample:'mangrove', color:'#acc48d'}
   };
 
   // Keep both projections aligned with assets/japan-land.svg, including the island inset.
@@ -75,10 +75,7 @@
   function sitePin(site) {
     if (!site) return '';
     const p = project(site.lon, site.lat);
-    const name = plantById(site.id).name;
-    return '<div class="jp-site-dot" style="' + position(p) + '" role="img" aria-label="' +
-      esc(name + '・' + site.place) + '"><i></i><strong class="' + (p[0]>490 ? 'jp-site-left' : '') +
-      (p[1]<65 ? ' jp-site-below' : '') + '">' + esc(name) + '</strong></div>';
+    return '<span aria-hidden="true" class="at-location" style="' + position(p) + '"></span>';
   }
 
   function detailCard(site, region, sown) {
@@ -118,7 +115,7 @@
       icon('globe',17) + ' 訪れた地方 <b>' + visited + ' / ' + regions.length + '</b></span></header>' +
       '<section class="jp-board" aria-label="日本の地方を探す"><div class="jp-sheet"><div class="jp-map" data-japan-map tabindex="-1" role="group" aria-label="八地方と南西諸島の日本地図">' +
       '<object class="jp-land" type="image/svg+xml" data="assets/japan-land.svg" tabindex="-1" aria-hidden="true"><img src="assets/japan-land.svg" alt=""></object>' +
-      regionPins(regions, selected) + sitePin(site) + '</div><div class="jp-map-foot"><span>' + (site ? esc(plantById(site.id).name + '　' + site.place) : '色は八つの地方、線は都道府県の境界') +
+      regionPins(regions, selected) + sitePin(site) + '</div><div class="jp-map-foot"><span' + (site ? ' class="at-site-caption"' : '') + '>' + (site ? esc(plantById(site.id).name + '　' + site.place) : '色は八つの地方、線は都道府県の境界') +
       '</span><a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-1-states-provinces/" target="_blank" rel="noopener noreferrer">地図データ　Natural Earth</a></div></div>' +
       '<nav class="jp-side" aria-label="探検する地方"><div class="jp-side-head"><h2>探検する地方</h2><span>' + total + '種</span></div>' +
       '<div class="jp-region-list">' + regionList(regions,selected) + '</div></nav></section>' +

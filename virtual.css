@@ -127,6 +127,30 @@
 .gv-quiz .gv-feedback:not(:empty) { margin-top: .65rem; font-size: .85rem; line-height: 1.7; color: var(--gv-green); }
 .gv-detail .gv-source { margin-top: 1.1rem; color: var(--gv-quiet); font-size: .78rem; line-height: 1.6; }
 .gv-source a { color: var(--gv-green); text-underline-offset: .15em; }
+.gv-care-options { display:grid; gap:.75rem; margin-top:1rem; }
+.gv-care-options section { padding:.8rem .95rem; border:1px solid var(--gv-stroke); border-radius:13px; }
+.gv-care-options h4, .gv-rank-block h4 { display:flex; align-items:center; gap:.35rem; font-size:.95rem; }
+.gv-care-options h4 small { margin-left:auto; color:var(--gv-quiet); font-size:.75rem; }
+.gv-care-options p, .gv-rank-block p { margin:.35rem 0 .6rem; line-height:1.7; font-size:.87rem; }
+.gv-inline-link, .gv-seed-gate a { color:var(--gv-green); font-weight:700; text-underline-offset:.18em; }
+.gv-inline-link { display:inline-block; margin-left:.6rem; font-size:.85rem; }
+.gv-care-result:not(:empty) { margin-top:.7rem; border-left:3px solid #739344; padding:.6rem .75rem; background:#eff5e6; font-size:.88rem; font-weight:700; }
+.gv-rank-block { margin-top:.85rem; padding:.8rem .95rem; border-radius:13px; background:#faf2dc; }
+.gv-rank-block h4 strong { color:#715225; }
+.gv-rank-block p { margin-bottom:0; }
+.gv-rank-2 { box-shadow:inset 0 0 0 3px #a2b985; }
+.gv-rank-3 { box-shadow:inset 0 0 0 4px #d6ae55; }
+.gv-bag-stats { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.45rem; font-size:.88rem; font-weight:700; }
+.gv-bag-stats span { display:inline-flex; align-items:center; gap:.35rem; }
+.gv-empty-bag { display:flex; gap:.85rem; align-items:center; margin-top:.85rem; padding:1rem; border:1px dashed #bfccad; border-radius:14px; background:#f4f6ec; }
+.gv-empty-bag .gv-thumb { flex-shrink:0; }
+.gv-empty-bag h3 { font-size:1.02rem; }
+.gv-empty-bag p { margin-top:.3rem; font-size:.85rem; line-height:1.7; }
+.gv-seeds .gv-btn { text-decoration:none; }
+.gv-seeds .gv-btn:disabled { background:#f1f2eb; border-color:#d8ddce; color:#5d665a; cursor:default; }
+.gv-seed-row .gv-seed-gate { grid-column:1/-1; padding:.2rem .4rem .25rem; color:#715225; font-size:.82rem; }
+.gv-book-rarity { font-size:.76rem; color:var(--gv-quiet); }
+.gv-book-rarity span { color:#87641e; }
 @media (max-width: 500px) {
   .gv-find { grid-template-columns:minmax(0, 1fr) minmax(104px, 42%); gap:.35rem; }
   .gv-find label { padding:0 .3rem; gap:.15rem; }

@@ -92,9 +92,8 @@
       '<a class="at-place jp-place" href="' + pathFor(region.id,site.id) + '" data-jp-site="' + esc(site.id) +
       '" aria-label="' + esc(plant.name + 'の場所「' + site.place + '」を日本地図で見る') + '">' + icon('globe',14) + esc(site.place) + '</a></div>' +
       '<p>' + esc(site.note) + '</p><a class="at-source" href="' + esc(site.source) + '" target="_blank" rel="noopener noreferrer">' +
-      esc(site.sourceName) + ' ' + icon('external-link',12) + '</a><div class="at-actions"><button type="button" class="at-action-main" data-jp-grow="' +
-      esc(site.id) + '">' + icon('sprout') + ' 庭で育てる</button><button type="button" class="at-action-book" data-jp-book="' +
-      esc(site.id) + '">' + icon('book') + ' ずかん</button></div></div></article>';
+      esc(site.sourceName) + ' ' + icon('external-link',12) + '</a><div class="at-actions"><button type="button" class="at-action-main" data-jp-study="' +
+      esc(site.id) + '">' + icon('book') + ' 調べてクイズに挑戦</button></div></div></article>';
   }
 
   function regionDetail(region) {
@@ -111,7 +110,7 @@
     const regions = window.GardenJapan.regions;
     const selected = regions.find(region=>region.id===(regionId || hashRegion));
     const site = selected?.plants.find(item=>item.id===(plantId || (hashRegion===selected.id && hashPlant)));
-    if (selected && !journey().hasVisited(selected.id)) journey().visit(selected.id);
+    if (selected) journey().visit(selected.id);
     const visited = regions.filter(region=>journey().hasVisited(region.id)).length;
     const total = regions.reduce((count,region)=>count+region.plants.length,0);
     root.innerHTML = '<div class="at-page jp-page" data-journey-root><header class="at-header"><div><h1>日本の植物地図</h1>' +
@@ -164,11 +163,7 @@
       const button = event.target.closest('button');
       if (!button) return;
       if (button.hasAttribute('data-jp-investigate')) moveFocus(view,'challenge');
-      else if (button.hasAttribute('data-jp-book')) window.GardenVirtual.openSpecies(button.dataset.jpBook);
-      else if (button.hasAttribute('data-jp-grow')) {
-        button.disabled = true;
-        window.GardenVirtual.plant(button.dataset.jpGrow);
-      }
+      else if (button.hasAttribute('data-jp-study')) window.GardenStudy.open(button.dataset.jpStudy, {mapId:'japan', regionId:selected.id});
     });
   }
 

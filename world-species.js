@@ -4,7 +4,7 @@
   window.GardenData.species.push(
     {
       id:'rice', name:'イネ', latin:'Oryza sativa', habitat:'日本の水田', group:'school', family:'イネ科',
-      starterLabel:'種', stages:['種もみ','芽ばえ','くきがふえる','穂が実る'],
+      starterLabel:'種もみ', stages:['種もみ','芽ばえ','くきがふえる','穂が実る'],
       fact:'田んぼのイネは、くきの先に「穂（ほ）」をつけます。1本の穂に実るお米は、およそ50〜70つぶ。穂の大きさや品種によっても数が変わります。',
       look:'1本の穂を目でたどってみよう。いくつもの細い枝に、もみがどんなふうについているかな？',
       question:'イネのどの部分に、お米がまとまって実るかな？',

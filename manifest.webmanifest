@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "かんさつガーデン",
+  "short_name": "かんさつガーデン",
+  "description": "世界と日本の植物を旅して学び、自分の庭で育てよう。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8f7ef",
+  "theme_color": "#f8f7ef",
+  "icons": [
+    { "src": "assets/app-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app-icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

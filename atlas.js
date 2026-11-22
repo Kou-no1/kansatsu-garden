@@ -74,10 +74,8 @@
     return '<article class="at-specimen"><div class="at-portrait">' + app().art(site.id, 3) + '</div>' +
       '<div class="at-copy"><div class="at-species-heading"><h3>' + esc(plant.name) + '</h3>' +
       '<div class="at-states">' + state + '</div></div>' + place + '<p>' + esc(site.note) + '</p>' +
-      sourceLink + '<div class="at-actions"><button type="button" class="at-action-main" data-at-plant="' +
-      esc(site.id) + '">' + icon('sprout', 16) + ' 庭で育てる</button>' +
-      '<button type="button" class="at-action-book" data-at-book="' + esc(site.id) + '">' +
-      icon('book', 16) + ' ずかん</button></div></div></article>';
+      sourceLink + '<div class="at-actions"><button type="button" class="at-action-main" data-at-study="' +
+      esc(site.id) + '">' + icon('book', 16) + ' 調べてクイズに挑戦</button></div></div></article>';
   }
 
   function drawSite(view, region) {
@@ -104,7 +102,7 @@
     const selected = regions.find(region => region.id === (regionId || hashRegion));
     const id = selected?.id || '';
     shownSite = hashRegion === id && selected?.plants.some(site => site.id === hashSite) ? hashSite : '';
-    if (selected && !exploration().hasVisited(id)) exploration().visit(id);
+    if (selected) exploration().visit(id);
     const visited = regions.filter(region => exploration().hasVisited(region.id)).length;
     const count = new Set(regions.flatMap(region => region.plants.map(site => site.id))).size;
 
@@ -155,11 +153,8 @@
         challenge.tabIndex = -1;
         challenge.focus({preventScroll:true});
         challenge.scrollIntoView({block:'start'});
-      } else if (button.dataset.atPlant) {
-        button.disabled = true;
-        window.GardenVirtual.plant(button.dataset.atPlant);
-      } else if (button.dataset.atBook) {
-        window.GardenVirtual.openSpecies(button.dataset.atBook);
+      } else if (button.dataset.atStudy) {
+        window.GardenStudy.open(button.dataset.atStudy, {mapId:'atlas', regionId:id});
       } else if (button.dataset.atLocate) {
         shownSite = button.dataset.atLocate;
         const target = formatRegionLink(selected) + '/' + encodeURIComponent(shownSite);

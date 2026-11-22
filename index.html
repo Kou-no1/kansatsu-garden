@@ -4,15 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f8f7ef">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="かんさつガーデン">
   <meta name="description" content="日本と世界の植物地図をめぐり、38種の植物を自分の庭で育てよう。学校や家の植物は、草たけ・葉・写真を観察ノートに記録できます。">
   <title>かんさつガーデン｜マイガーデン</title>
   <link rel="icon" href="assets/garden-mark.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="garden.css">
   <link rel="stylesheet" href="observations.css">
   <link rel="stylesheet" href="virtual.css">
   <link rel="stylesheet" href="atlas.css">
   <link rel="stylesheet" href="japan-atlas.css">
   <link rel="stylesheet" href="exploration.css">
+  <link rel="stylesheet" href="field-study.css">
+  <link rel="stylesheet" href="farmer-ui.css">
+  <link rel="stylesheet" href="first-play.css">
   <script defer src="species.js"></script>
   <script defer src="world-species.js"></script>
   <script defer src="japan-species.js"></script>
@@ -21,12 +28,18 @@
   <script defer src="japan-regions.js"></script>
   <script defer src="maps.js"></script>
   <script defer src="icons.js"></script>
+  <script defer src="care-profiles.js"></script>
+  <script defer src="farmer-state.js"></script>
+  <script defer src="pwa.js"></script>
   <script defer src="observations.js"></script>
   <script defer src="virtual.js"></script>
   <script defer src="exploration.js"></script>
   <script defer src="japan-journey.js"></script>
   <script defer src="atlas.js"></script>
   <script defer src="japan-atlas.js"></script>
+  <script defer src="field-study.js"></script>
+  <script defer src="farmer-ui.js"></script>
+  <script defer src="first-play.js"></script>
   <script defer src="garden.js"></script>
 </head>
 <body>
@@ -42,6 +55,7 @@
         <a href="#japan" data-page="atlas"><span data-icon="globe"></span>植物地図</a>
         <a href="#notebook" data-page="notebook"><span data-icon="notebook"></span>かんさつノート</a>
         <a href="#book" data-page="book"><span data-icon="book"></span>植物ずかん</a>
+        <a href="#shop" data-page="shop"><span data-icon="shop"></span>ショップ</a>
       </nav>
       <button type="button" class="help-button" id="help"><span data-icon="help"></span><span>あそびかた</span></button>
     </div>

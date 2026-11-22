@@ -1,0 +1,11 @@
+.fs-study .fs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .65rem;
+}
+.fs-study [data-study-collect] { margin-top: .65rem; }
+.fs-study .fs-stops { margin-top: 1rem; }
+.fs-study .fs-stops h4 { margin: 0; font-size: .93rem; }
+.fs-study .gv-quiz h4:focus-visible { outline-offset: .2rem; }

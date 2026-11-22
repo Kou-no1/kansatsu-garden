@@ -1,0 +1,49 @@
+.fp-card, .fp-map {
+  display:flex; align-items:center; gap:16px; margin:18px 0;
+  border:1px solid #cbd8c2; border-radius:16px; background:#f0f5e9; color:#354d36;
+}
+.fp-card { padding:12px 20px 12px 12px; }
+.fp-portrait { display:grid; place-items:center; width:74px; height:66px; flex:none; border-radius:12px; background:#e2ead6; }
+.fp-portrait .plant-art, .fp-trip-intro .plant-art { width:100%; height:100%; object-fit:contain; }
+.fp-intro h2 { font-size:19px; line-height:1.45; }
+.fp-intro p, .fp-tour p, .fp-install p { line-height:1.7; color:#52654f; }
+.fp-intro p { font-size:14px; }
+.fp-card-actions, .fp-actions { display:flex; align-items:center; flex-wrap:wrap; gap:6px 13px; }
+.fp-card-actions { margin-left:auto; justify-content:flex-end; }
+.fp-link { background:none; border:none; padding:8px 2px; color:#395e40; text-decoration:underline; text-underline-offset:3px; font-size:13px; font-weight:700; }
+.fp-card-actions > [data-fp="hide"] { color:#5d685b; font-size:12px; }
+.fp-tour, .fp-install { display:grid; gap:16px; }
+.fp-tour > .fp-link, .fp-install > button { justify-self:start; }
+.fp-trip-intro, .fp-app-heading { display:flex; gap:16px; align-items:center; }
+.fp-trip-intro { background:#f0f5e9; border-radius:13px; padding:10px 15px; }
+.fp-trip-intro .plant-art { width:76px; height:72px; }
+.fp-trip-intro small { font-size:12px; color:#536951; }
+.fp-trip-intro h3,.fp-app-heading h3 { margin:3px 0; font-size:20px; line-height:1.5; }
+.fp-app-heading img { border-radius:14px; }
+.fp-chapters { display:grid; gap:10px; list-style:none; margin:0; padding:0; }
+.fp-chapters li { display:flex; align-items:center; gap:11px; font-size:15px; color:#52634e; }
+.fp-dot { display:inline-grid; place-items:center; width:25px; height:25px; border:1px solid #cdd7c8; border-radius:50%; font-size:13px; font-weight:750; }
+.fp-chapters [aria-current] { color:#305637; font-weight:750; }
+.fp-chapters [aria-current] .fp-dot { background:#3c6442; color:white; border-color:#3c6442; }
+.fp-offline { background:#edf3f1; border-radius:12px; padding:13px 15px; }
+.fp-offline h4 { display:flex; align-items:center; gap:7px; margin:0 0 5px; }
+.fp-install > p:empty, .fp-install [hidden] { display:none; }
+.fp-map { margin:0 0 16px; padding:10px 16px; flex-wrap:wrap; }
+.fp-map > span { display:flex; align-items:center; gap:5px; font-size:13px; }
+.fp-map strong { font-size:16px; }
+.fp-map .button { margin-left:auto; }
+@media(max-width:850px) {
+  .fp-card { display:grid; grid-template-columns:auto 1fr; gap:8px 12px; }
+  .fp-card-actions { grid-column:1/-1; justify-content:flex-start; margin:0; }
+}
+@media(max-width:620px) {
+  .fp-card { margin:12px 0; padding:10px 12px; }
+  .fp-portrait { width:50px; height:50px; }
+  .fp-intro h2 { font-size:16px; }.fp-intro p { font-size:12px; }
+  .fp-card-actions { gap:3px 10px; }
+  .fp-card-actions .button, .fp-map .button { min-height:37px; padding:6px 10px; font-size:13px; }
+  .fp-card-actions .fp-link { font-size:12px; }
+  .fp-map { gap:7px 12px; padding:10px; }
+  .fp-map > span { flex-basis:100%; }
+  .fp-map > strong { font-size:13px; }
+}

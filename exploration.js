@@ -43,6 +43,8 @@
   function createJourney({missions, regions, prefix, mapId, unit}) {
     const remembered = new Set();
     const unsaved = new Set();
+    const settledVisits = new Map();
+    const visiting = new Set();
     const app = () => window.GardenApp;
     const esc = value => app().escape(value);
     const virtual = () => window.GardenVirtual;
@@ -75,7 +77,17 @@
       }
     }
 
-    const visit = id => mark('visit', id);
+    function visit(id) {
+      if (!missions.has(id)) return;
+      mark('visit', id);
+      const date = new Date().toLocaleDateString('ja-JP');
+      if (!window.GardenFarmer || visiting.has(id) || settledVisits.get(id) === date) return;
+      visiting.add(id);
+      window.GardenFarmer.claimTrip(mapId, id).then(result => {
+        if (result.ok || result.reason === 'visited') settledVisits.set(id, date);
+        if (result.ok) app().toast(result.message);
+      }).finally(() => visiting.delete(id));
+    }
     const hasVisited = id => hasMark('visit', id);
     const hasStamp = id => hasMark('stamp', id);
     const isGrown = id => virtual().getPlants().some(plant => plant.species === id);
@@ -115,13 +127,11 @@
           (fresh ? '正解！ ' + esc(region.name) + 'の調査スタンプを獲得' : esc(region.name) + 'の調査を達成！') + '</h3>' +
           '<p>' + esc(mission.answer) + '</p>' + (saved ? '' : '<p class="ex-storage-note">このスタンプは画面を閉じるまで残ります。</p>') +
           '<div class="ex-result-actions"><button type="button" data-ex-care>' + app().icon('sprout',16) + ' ' +
-          esc(name) + (isGrown(mission.target) ? 'のおせわ' : 'を育てる') +
+          esc(name) + (fresh ? 'の持ち帰りへ' : 'を調べる') +
           '</button><button type="button" data-ex-retry>もう一度とく</button></div></div></div>';
         root.querySelector('[data-ex-status]').textContent = 'スタンプ獲得ずみ';
         content.querySelector('[data-ex-care]').addEventListener('click', () => {
-          const plant = virtual().getPlants().find(item => item.species === mission.target);
-          if (plant) virtual().openPlant(plant.id);
-          else virtual().plant(mission.target);
+          window.GardenStudy.open(mission.target,{mapId,regionId});
         });
         content.querySelector('[data-ex-retry]').addEventListener('click', () => showQuestion(true));
         if (fresh) content.querySelector('h3').focus({preventScroll:true});
@@ -145,6 +155,7 @@
             return;
           }
           mark('stamp',regionId);
+          window.GardenStudy.noteRegionalAnswer(mission.target,{mapId,regionId});
           const passport = root.closest('[data-journey-root]')?.querySelector('[data-journey-passport]');
           if (passport) renderPassport(passport);
           showResult(true);

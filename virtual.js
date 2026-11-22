@@ -159,7 +159,8 @@
   }
 
   function category(species) {
-    return species.group === 'wild' ? '世界の植物' : '学校の植物';
+    if (species.group === 'school') return '学校の植物';
+    return window.GardenJapan.forSpecies(species.id) ? '日本の植物' : '世界の植物';
   }
 
   function stageTimeText(remaining) {
@@ -209,26 +210,26 @@
   }
 
   function atlasLink(id) {
-    const location = window.GardenRegions.forSpecies(id);
-    if (!location) return '';
-    return '<a class="gv-atlas-link" data-gv-atlas href="#atlas/' + esc(location.region.id) + '/' + esc(id) + '">' +
-      icon('globe', 16) + '<span>地図で見る<small>' + esc(location.region.name) + ' ・ ' + esc(location.plant.place) + '</small></span></a>';
+    return window.GardenMaps.placesFor(id).map(({map, region, plant, href}) =>
+      '<a class="gv-atlas-link" data-gv-atlas href="' + esc(href) + '">' + icon('globe', 16) +
+      '<span>' + map.name + 'で見る<small>' + esc(region.name) + ' ・ ' + esc(plant.place) + '</small></span></a>'
+    ).join('');
   }
 
   function bindAtlasLink(root) {
-    root.querySelector('[data-gv-atlas]')?.addEventListener('click', event => {
+    root.querySelectorAll('[data-gv-atlas]').forEach(link => link.addEventListener('click', event => {
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       app().closeModal();
       if (location.hash === event.currentTarget.hash) {
         event.preventDefault();
         app().refresh();
         requestAnimationFrame(() => {
-          const map = document.querySelector('.at-map');
+          const map = document.querySelector('[data-japan-map], .at-map');
           map?.focus({preventScroll:true});
           map?.scrollIntoView({block:'center'});
         });
       }
-    });
+    }));
   }
 
   function normalizedQuery(value) {
@@ -237,15 +238,19 @@
 
   const otherNames = {
     sunflower:'向日葵', morning:'朝顔', bean:'隠元豆 いんげん', balsam:'鳳仙花', rice:'稲 お米 こめ',
-    cherry:'桜 さくら 染井吉野', loofah:'糸瓜', cacao:'カカオノキ', 'silver-fern':'シダ'
+    cherry:'桜 さくら 染井吉野', loofah:'糸瓜', cacao:'カカオノキ', 'silver-fern':'シダ',
+    mizubasho:'水芭蕉', ezomatsu:'蝦夷松', haskap:'クロミノウグイスカグラ', komakusa:'駒草', katakuri:'片栗',
+    beech:'橅', ginkgo:'銀杏 公孫樹', 'morning-lotus':'蓮 れんこん', yamabuki:'山吹', wasabi:'山葵',
+    fujibakama:'藤袴', kakitsubata:'杜若 燕子花', wisteria:'藤', ume:'梅', tea:'茶 お茶 茶の木',
+    sugi:'杉', sudachi:'酢橘', camellia:'椿 ヤブツバキ', deigo:'梯梧', mangrove:'雄蛭木 マングローブ'
   };
 
   function catalogControls(selection) {
-    const groups = [['all', 'すべて'], ['school', '学校の植物'], ['wild', '世界の植物']];
+    const groups = [['all', 'すべて'], ['school', '学校の植物'], ['japan', '日本地図の植物'], ['wild', '世界地図の植物']];
     return '<div class="gv-catalog-controls"><div class="gv-find"><label class="gv-find-name">' + icon('search', 17) +
       '<input data-gv-search type="search" aria-label="植物の名前で検索" placeholder="植物の名前でさがす" value="' + esc(selection.query) + '"></label>' +
       '<label class="gv-find-region">' + icon('globe', 16) + '<select data-gv-region aria-label="地域でしぼりこむ"><option value="">すべての地域</option>' +
-      window.GardenRegions.regions.map(region=>'<option value="' + esc(region.id) + '"' + (region.id === selection.region ? ' selected' : '') + '>' + esc(region.name) + '</option>').join('') +
+      window.GardenMaps.maps.map(map=>'<optgroup label="' + map.name + '">' + map.data.regions.map(region=>'<option value="' + esc(region.id) + '"' + (region.id === selection.region ? ' selected' : '') + '>' + esc(region.name) + '</option>').join('') + '</optgroup>').join('') +
       '</select></label></div><div class="gv-filter-line"><div class="gv-filters" role="group" aria-label="植物の種類">' + groups.map(([id,label]) =>
         '<button type="button" data-gv-filter="' + id + '" aria-pressed="' + (id === selection.group) + '">' + label + '</button>').join('') +
       '</div><span class="gv-result-count" role="status" aria-live="polite"></span></div></div>';
@@ -261,8 +266,10 @@
     function updateResults() {
       const query = normalizedQuery(selection.query);
       const items = data().filter(species => {
-        if (selection.group !== 'all' && species.group !== selection.group) return false;
-        if (selection.region && window.GardenRegions.forSpecies(species.id)?.region.id !== selection.region) return false;
+        if (selection.group === 'school' && species.group !== 'school') return false;
+        if (selection.group === 'japan' && !window.GardenJapan.forSpecies(species.id)) return false;
+        if (selection.group === 'wild' && !window.GardenRegions.forSpecies(species.id)) return false;
+        if (selection.region && !window.GardenMaps.maps.some(map=>map.data.forSpecies(species.id)?.region.id === selection.region)) return false;
         const names = [species.name, species.latin, otherNames[species.id] || ''];
         return !query || names.some(name => normalizedQuery(name).includes(query));
       });
@@ -292,7 +299,7 @@
   }
 
   function openSeeds(filter = 'all') {
-    const selection = {group: ['school','wild'].includes(filter) ? filter : 'all', region: '', query: ''};
+    const selection = {group: ['school','wild','japan'].includes(filter) ? filter : 'all', region: '', query: ''};
     const root = app().modal('育てる植物をえらぶ', '<div class="gv-seeds">' + catalogControls(selection) + '<div class="gv-seed-list"></div></div>');
     bindCatalog(root, selection, '.gv-seed-list', species => `
       <article class="gv-seed-row">

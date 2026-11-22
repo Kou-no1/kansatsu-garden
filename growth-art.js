@@ -15,7 +15,27 @@
     sequoia: ['seed', 'conifer-sprout', 'conifer-young'],
     wollemi: ['seed', 'sprout', 'conifer-young'],
     'silver-fern': ['fern-spore', 'fern-gametophyte', 'fern-young'],
-    puya: ['seed', 'grass-shoot', 'puya-rosette']
+    puya: ['seed', 'grass-shoot', 'puya-rosette'],
+    mizubasho: ['seed', 'grass-shoot', 'jp-mizubasho-young'],
+    ezomatsu: ['seed', 'conifer-sprout', 'conifer-young'],
+    haskap: ['seed', 'sprout', 'leafy'],
+    komakusa: ['seed', 'jp-komakusa-cotyledon', 'jp-komakusa-young'],
+    katakuri: ['seed', 'grass-shoot', 'jp-katakuri-leaf'],
+    beech: ['seed', 'sprout', 'jp-kerria-young'],
+    ginkgo: ['seed', 'cherry-sapling', 'jp-ginkgo-young'],
+    'morning-lotus': ['seed', 'waterlily-sprout', 'waterlily-young'],
+    yamabuki: ['seed', 'sprout', 'jp-kerria-young'],
+    wasabi: ['seed', 'sprout', 'jp-wasabi-young'],
+    fujibakama: ['seed', 'sprout', 'leafy'],
+    kakitsubata: ['seed', 'grass-shoot', 'jp-iris-young'],
+    wisteria: ['seed', 'sprout', 'jp-wisteria-young'],
+    ume: ['seed', 'sprout', 'jp-kerria-young'],
+    tea: ['seed', 'sprout', 'cacao-young'],
+    sugi: ['seed', 'conifer-sprout', 'conifer-young'],
+    sudachi: ['seed', 'sprout', 'leafy'],
+    camellia: ['seed', 'sprout', 'cacao-young'],
+    deigo: ['seed', 'sprout', 'cherry-branches'],
+    mangrove: ['jp-mangrove-propagule', 'jp-mangrove-rooted', 'jp-mangrove-young']
   };
   const seedlingStages = ['seed', 'sprout', 'leafy'];
 

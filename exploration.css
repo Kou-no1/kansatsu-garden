@@ -12,6 +12,11 @@
 .ex-north-america { --ex-ink:#94734d; --ex-tint:#f1e9d8; }
 .ex-south-america { --ex-ink:#317b69; --ex-tint:#e0efe4; }
 .ex-oceania { --ex-ink:#477c8d; --ex-tint:#e4efef; }
+.ex-hokkaido,.ex-tohoku { --ex-ink:#4a736d; --ex-tint:#e5eee2; }
+.ex-kanto,.ex-shikoku { --ex-ink:#8c613a; --ex-tint:#faf0d7; }
+.ex-chubu,.ex-kinki { --ex-ink:#5f7739; --ex-tint:#eaf0d9; }
+.ex-chugoku,.ex-kyushu { --ex-ink:#8d5b68; --ex-tint:#f5e7df; }
+.ex-japan-stamps { grid-template-columns:repeat(8,minmax(0,1fr)); }
 .ex-stamp { display:grid; align-content:center; justify-items:center; gap:3px; min-width:0; text-align:center; text-decoration:none; padding:12px 4px 9px; color:#606854; border:1px dashed #c7c5ac; border-radius:6px; background:#fcfaee; }
 .ex-stamp:hover,.ex-stamp:focus-visible { border-color:var(--ex-ink); background:var(--ex-tint); }
 .ex-imprint { display:grid; place-items:center; width:61px; max-width:100%; aspect-ratio:1; color:#95947f; border:1px dashed #bcbba5; border-radius:50%; }

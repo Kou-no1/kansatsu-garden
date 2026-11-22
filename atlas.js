@@ -108,7 +108,7 @@
     const visited = regions.filter(region => exploration().hasVisited(region.id)).length;
     const count = new Set(regions.flatMap(region => region.plants.map(site => site.id))).size;
 
-    root.innerHTML = '<div class="at-page"><header class="at-header"><div><h1>世界の植物地図</h1>' +
+    root.innerHTML = '<div class="at-page" data-journey-root><header class="at-header"><div><h1>世界の植物地図</h1>' +
       '<p>ピンを選んで、植物が野生で育つ場所や、人が育てている場所を訪ねよう。</p></div>' +
       '<span class="at-trip-count">' + icon('globe', 17) + ' 訪れた地域 <b>' + visited + ' / ' +
       regions.length + '</b></span></header>' +
@@ -123,10 +123,10 @@
       '</div></nav></section>' +
       (selected ? '<section class="at-detail" aria-labelledby="at-region-heading"><div class="at-detail-head"><div>' +
         '<h2 id="at-region-heading" tabindex="-1">' + esc(selected.name) + 'の植物</h2><p>' +
-        esc(selected.description) + '</p></div><div class="at-region-tools"><span class="at-climate">' + icon('sun', 15) + ' ' +
+        esc(selected.description) + '</p>' + (id === 'asia' ? '<a class="at-japan-link" href="#japan">' + icon('globe',15) + ' 日本の8地方をくわしく見る</a>' : '') + '</div><div class="at-region-tools"><span class="at-climate">' + icon('sun', 15) + ' ' +
         esc(selected.climate) + '</span><button class="at-jump" type="button" data-at-investigate>' + icon('search',15) + ' ' +
         (exploration().hasStamp(id) ? '調査の結果を見る' : '地域の調査に挑戦') + '</button></div></div><div class="at-specimens">' + selected.plants.map(plantCard).join('') +
-        '</div></section><div data-at-challenge></div>' : '') + '<div data-at-passport></div></div>';
+        '</div></section><div data-at-challenge></div>' : '') + '<div data-at-passport data-journey-passport></div></div>';
 
     const view = root.querySelector('.at-page');
     drawSite(view, selected);

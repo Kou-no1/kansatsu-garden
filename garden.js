@@ -49,8 +49,8 @@
 
   function openGuide() {
     modal('あそびかた', '<div class="guide">' +
-      '<section><span class="guide-icon teal">' + icon('globe',23) + '</span><div><h3>世界の植物に会いに行く</h3><p>世界地図のピンから行き先を選ぼう。植物をタップして場所を確かめ、調査の手がかりを読んで答えると、その地域のスタンプが手に入ります。</p></div></section>' +
-      '<section><span class="guide-icon amber">' + icon('sprout',23) + '</span><div><h3>キャラを育てる</h3><p>世界地図の「庭で育てる」や、庭の「植物をふやす」で好きな植物を選ぼう。画面を閉じている間も時間が進みます。ゲームでは1日1回の水やりで、成長が4時間分進みます。</p></div></section>' +
+      '<section><span class="guide-icon teal">' + icon('globe',23) + '</span><div><h3>地図で植物に会いに行く</h3><p>日本地図と世界地図から、行きたい地方や地域を選ぼう。植物が育つ場所を見つけて、調査の手がかりをもとに答えると、スタンプが手に入ります。</p></div></section>' +
+      '<section><span class="guide-icon amber">' + icon('sprout',23) + '</span><div><h3>キャラを育てる</h3><p>地図の「庭で育てる」や、庭の「植物をふやす」で好きな植物を選ぼう。画面を閉じている間も時間が進みます。ゲームでは1日1回の水やりで、成長が4時間分進みます。</p></div></section>' +
       '<section><span class="guide-icon teal">' + icon('pen',22) + '</span><div><h3>実物を観察する</h3><p>草たけと葉の数をはかって、「観察を記録する」に書こう。写真や気づきも残せます。「実物の庭」の草たけと葉が記録に合わせて変わります。</p></div></section>' +
       '<section><span class="guide-icon lilac">' + icon('chart',22) + '</span><div><h3>育ち方をくらべる</h3><p>同じ種類の鉢を2つ用意し、日当たりか肥料のどちらか一つだけを変えてみよう。「かんさつノート」で2つの鉢を選ぶと、成長を同じグラフでくらべられます。</p></div></section>' +
       '<section><span class="guide-icon amber">' + icon('book',22) + '</span><div><h3>植物のひみつを見つける</h3><p>「植物ずかん」で育つ場所や体のつくりを調べよう。クイズに正解すると、図鑑に正解の印がつきます。</p></div></section>' +
@@ -123,13 +123,14 @@
   }
 
   function featureCard() {
-    const regions = window.GardenRegions.regions;
-    const unexplored = regions.filter(region=>!window.GardenExploration.hasVisited(region.id));
-    const destinations = unexplored.length ? unexplored : regions;
-    const index = Math.floor(Date.UTC(day().getFullYear(), day().getMonth(), day().getDate()) / 86400000);
-    const region = destinations[index % destinations.length];
+    const stops = window.GardenMaps.maps.flatMap(map => map.data.regions.map(region => ({region, map})));
+    const unexplored = stops.filter(({map, region}) => !(map.id==='japan' ? window.GardenJapanJourney : window.GardenExploration).hasVisited(region.id));
+    const destinations = unexplored.length ? unexplored : stops;
+    const now = day();
+    const index = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+    const {region, map} = destinations[index % destinations.length];
     const plant = species.get(region.plants[index % region.plants.length].id);
-    return '<a class="field-guide" href="#atlas/' + region.id + '"><span class="guide-caption">' + icon('globe',15) + ' 次の探検先</span>' +
+    return '<a class="field-guide" href="#' + map.id + '/' + region.id + '"><span class="guide-caption">' + icon('globe',15) + ' 次の探検先</span>' +
       '<strong>' + escape(region.name) + '</strong><span class="rare-place">' + escape(plant.name) + 'に会いに行こう</span><span class="feature-link">地図をひらく ' +
       icon('chevron-right',13) + '</span>' + art(plant.id) + '</a>';
   }
@@ -149,7 +150,7 @@
     main.innerHTML = '<section class="hero" aria-labelledby="hero-title"><img class="hero-illustration" src="assets/hero.webp" alt=""><div class="hero-copy"><span class="hero-date">' +
       icon('sun',18) + escape(illustrationDate) + '</span><h1 id="hero-title">わたしの庭</h1><p>植物を育てて、今日の発見を記録しよう。</p>' +
       '<div class="hero-actions"><button class="button primary hero-button" type="button" data-action="record">' + icon('pen',18) + '観察を記録する</button>' +
-      '<a class="hero-atlas-link" href="#atlas">' + icon('globe',18) + '世界地図へ</a></div></div></section>' +
+      '<a class="hero-atlas-link" href="#japan">' + icon('globe',18) + '日本地図へ</a></div></div></section>' +
       '<div class="dashboard"><section class="grow-section" aria-labelledby="grow-title"><div class="grow-heading"><h2 id="grow-title"><span class="title-icon">' + icon('sprout',25) +
       '</span>育てている植物 <span class="plant-count">' + plants.length + '</span></h2><button class="button add-button" type="button" data-action="add">' +
       icon('plus',17) + (real?'鉢をふやす':'植物をふやす') + '</button></div>' +
@@ -161,20 +162,35 @@
 
   function currentPage() {
     const fragment = location.hash.slice(1).split('/')[0];
-    return ['book','notebook','atlas'].includes(fragment) ? fragment : 'garden';
+    return ['book','notebook','atlas','japan'].includes(fragment) ? fragment : 'garden';
+  }
+
+  function renderMap() {
+    const [, region, plant] = location.hash.split('/');
+    if (!main.querySelector('#map-view')) {
+      const links = window.GardenMaps.maps.map(map=>'<a href="#' + map.id + '">' + map.name + '</a>').join('');
+      main.innerHTML = '<nav class="map-switch" aria-label="探検する地図">' + links + '</nav><div id="map-view"></div>';
+    }
+    main.querySelectorAll('.map-switch a').forEach(link => {
+      if (link.hash === '#' + page) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
+    const view = main.querySelector('#map-view');
+    if (page==='japan') window.GardenJapanAtlas.render(view,region,plant);
+    else window.GardenAtlas.render(view,region);
   }
 
   function refresh() {
     page = currentPage();
     real = location.hash === '#garden/real';
     document.querySelectorAll('[data-page]').forEach(link => {
-      if (link.dataset.page === page) link.setAttribute('aria-current','page');
+      if (link.dataset.page === (page==='japan' ? 'atlas' : page)) link.setAttribute('aria-current','page');
       else link.removeAttribute('aria-current');
     });
-    document.title = 'かんさつガーデン｜' + ({garden:'マイガーデン',book:'植物ずかん',notebook:'かんさつノート',atlas:'世界の植物地図'}[page]);
+    document.title = 'かんさつガーデン｜' + ({garden:'マイガーデン',book:'植物ずかん',notebook:'かんさつノート',atlas:'世界の植物地図',japan:'日本の植物地図'}[page]);
     if (page==='notebook') obs.render(main);
     else if (page==='book') v.renderBook(main);
-    else if (page==='atlas') window.GardenAtlas.render(main, location.hash.split('/')[1]);
+    else if (page==='atlas' || page==='japan') renderMap();
     else renderHome();
   }
 

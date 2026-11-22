@@ -40,121 +40,126 @@
     }]
   ]);
 
-  const prefix = 'kansatsu-garden.exploration.v1.';
-  const remembered = new Set();
-  const unsaved = new Set();
-  const app = () => window.GardenApp;
-  const esc = value => app().escape(value);
-  const virtual = () => window.GardenVirtual;
-  const getSpecies = id => window.GardenData.get(id);
+  function createJourney({missions, regions, prefix, mapId, unit}) {
+    const remembered = new Set();
+    const unsaved = new Set();
+    const app = () => window.GardenApp;
+    const esc = value => app().escape(value);
+    const virtual = () => window.GardenVirtual;
+    const getSpecies = id => window.GardenData.get(id);
 
-  function hasMark(kind, id) {
-    if (!missions.has(id)) return false;
-    const key = prefix + kind + '.' + id;
-    if (unsaved.has(key)) return true;
-    try {
-      const earned = window.localStorage.getItem(key) === '1';
-      if (earned) remembered.add(key);
-      else remembered.delete(key);
-      return earned;
-    } catch {
-      return remembered.has(key);
-    }
-  }
-
-  function mark(kind, id) {
-    if (!missions.has(id)) return;
-    const key = prefix + kind + '.' + id;
-    if (!unsaved.has(key) && hasMark(kind, id)) return;
-    remembered.add(key);
-    try {
-      window.localStorage.setItem(key, '1');
-      unsaved.delete(key);
-    } catch {
-      unsaved.add(key);
-    }
-  }
-
-  const visit = id => mark('visit', id);
-  const hasVisited = id => hasMark('visit', id);
-  const hasStamp = id => hasMark('stamp', id);
-  const isGrown = id => virtual().getPlants().some(plant => plant.species === id);
-
-  function renderPassport(root) {
-    const regions = window.GardenRegions.regions;
-    const count = regions.filter(region => hasStamp(region.id)).length;
-    root.innerHTML = '<section class="ex-passport" aria-label="調査スタンプ帳"><header class="ex-title"><h2>' +
-      app().icon('book',21) + ' 調査スタンプ帳</h2><span>' + count + ' / ' + regions.length + ' 地域</span></header>' +
-      '<p>地域の植物を手がかりから見つけると、スタンプが集まるよ。</p><div class="ex-stamps">' +
-      regions.map(region => {
-        const earned = hasStamp(region.id);
-        const status = earned ? '調査ずみ' : hasVisited(region.id) ? '訪問ずみ' : '未訪問';
-        const picture = earned ? app().art(missions.get(region.id).target,3) : app().icon('globe',34);
-        return '<a class="ex-stamp ex-' + esc(region.id) + (earned ? ' ex-earned' : '') +
-          '" href="#atlas/' + esc(region.id) + '" data-at-region="' + esc(region.id) + '">' +
-          '<span class="ex-imprint" aria-hidden="true">' + picture + '</span><strong>' + esc(region.name) +
-          '</strong><small>' + status + '</small></a>';
-      }).join('') + '</div>' + (unsaved.size ? '<p class="ex-storage-note">このブラウザーでは、今回の探検の記録は画面を閉じるまで残ります。</p>' : '') + '</section>';
-  }
-
-  function renderChallenge(root, regionId) {
-    const mission = missions.get(regionId);
-    if (!mission) { root.replaceChildren(); return; }
-    const region = window.GardenRegions.regions.find(place => place.id === regionId);
-    const name = getSpecies(mission.target).name;
-    const earned = hasStamp(regionId);
-    root.innerHTML = '<section class="ex-challenge"><header class="ex-title"><h2>' +
-      app().icon('search',20) + ' ' + esc(region.name) + 'の植物調査</h2>' +
-      '<span data-ex-status>' + (earned ? 'スタンプ獲得ずみ' : '調査に挑戦') + '</span></header>' +
-      '<div data-ex-content></div></section>';
-    const content = root.querySelector('[data-ex-content]');
-
-    function showResult(fresh) {
-      const saved = !unsaved.has(prefix + 'stamp.' + regionId);
-      content.innerHTML = '<div class="ex-result"><div class="ex-result-picture ex-' + esc(regionId) + '">' +
-        app().art(mission.target,3) + '</div><div><h3 tabindex="-1">' +
-        (fresh ? '正解！ ' + esc(region.name) + 'の調査スタンプを獲得' : esc(region.name) + 'の調査を達成！') + '</h3>' +
-        '<p>' + esc(mission.answer) + '</p>' + (saved ? '' : '<p class="ex-storage-note">このスタンプは画面を閉じるまで残ります。</p>') +
-        '<div class="ex-result-actions"><button type="button" data-ex-care>' + app().icon('sprout',16) + ' ' +
-        esc(name) + (isGrown(mission.target) ? 'のおせわ' : 'を育てる') +
-        '</button><button type="button" data-ex-retry>もう一度とく</button></div></div></div>';
-      root.querySelector('[data-ex-status]').textContent = 'スタンプ獲得ずみ';
-      content.querySelector('[data-ex-care]').addEventListener('click', () => {
-        const plant = virtual().getPlants().find(item => item.species === mission.target);
-        if (plant) virtual().openPlant(plant.id);
-        else virtual().plant(mission.target);
-      });
-      content.querySelector('[data-ex-retry]').addEventListener('click', () => showQuestion(true));
-      if (fresh) content.querySelector('h3').focus({preventScroll:true});
+    function hasMark(kind, id) {
+      if (!missions.has(id)) return false;
+      const key = prefix + kind + '.' + id;
+      if (unsaved.has(key)) return true;
+      try {
+        const earned = window.localStorage.getItem(key) === '1';
+        if (earned) remembered.add(key);
+        else remembered.delete(key);
+        return earned;
+      } catch {
+        return remembered.has(key);
+      }
     }
 
-    function showQuestion(moveFocus) {
-      content.innerHTML = '<p class="ex-clue">' + esc(mission.clue) + '</p>' +
-        '<fieldset class="ex-options"><legend tabindex="-1">見つけた植物はどれ？</legend>' +
-        mission.choices.map(id => '<button type="button" data-ex-choice="' + esc(id) + '">' +
-          '<span class="ex-option-art">' + app().art(id,3) + '</span><span>' + esc(getSpecies(id).name) + '</span></button>').join('') +
-        '</fieldset><p class="ex-feedback" role="status"></p>';
-      const options = content.querySelector('.ex-options');
-      if (moveFocus) options.querySelector('legend').focus({preventScroll:true});
-      options.addEventListener('click', event => {
-        const button = event.target.closest('[data-ex-choice]');
-        if (!button || button.getAttribute('aria-disabled') === 'true') return;
-        const choice = button.dataset.exChoice;
-        if (choice !== mission.target) {
-          button.setAttribute('aria-disabled','true');
-          content.querySelector('.ex-feedback').textContent = getSpecies(choice).name + 'を選んだね。' + mission.hint;
-          return;
-        }
-        mark('stamp',regionId);
-        const passport = root.closest('.at-page')?.querySelector('[data-at-passport]');
-        if (passport) renderPassport(passport);
-        showResult(true);
-      });
+    function mark(kind, id) {
+      if (!missions.has(id)) return;
+      const key = prefix + kind + '.' + id;
+      if (!unsaved.has(key) && hasMark(kind, id)) return;
+      remembered.add(key);
+      try {
+        window.localStorage.setItem(key, '1');
+        unsaved.delete(key);
+      } catch {
+        unsaved.add(key);
+      }
     }
 
-    if (earned) showResult(false);
-    else showQuestion(false);
+    const visit = id => mark('visit', id);
+    const hasVisited = id => hasMark('visit', id);
+    const hasStamp = id => hasMark('stamp', id);
+    const isGrown = id => virtual().getPlants().some(plant => plant.species === id);
+
+    function renderPassport(root) {
+      const count = regions.filter(region => hasStamp(region.id)).length;
+      root.innerHTML = '<section class="ex-passport" aria-label="調査スタンプ帳"><header class="ex-title"><h2>' +
+        app().icon('book',21) + ' 調査スタンプ帳</h2><span>' + count + ' / ' + regions.length + ' ' + unit + '</span></header>' +
+        '<p>地域の植物を手がかりから見つけると、スタンプが集まるよ。</p><div class="ex-stamps ex-' + mapId + '-stamps">' +
+        regions.map(region => {
+          const earned = hasStamp(region.id);
+          const status = earned ? '調査ずみ' : hasVisited(region.id) ? '訪問ずみ' : '未訪問';
+          const picture = earned ? app().art(missions.get(region.id).target,3) : app().icon('globe',34);
+          return '<a class="ex-stamp ex-' + esc(region.id) + (earned ? ' ex-earned' : '') +
+            '" href="#' + mapId + '/' + esc(region.id) + '" data-at-region="' + esc(region.id) + '">' +
+            '<span class="ex-imprint" aria-hidden="true">' + picture + '</span><strong>' + esc(region.name) +
+            '</strong><small>' + status + '</small></a>';
+        }).join('') + '</div>' + (unsaved.size ? '<p class="ex-storage-note">このブラウザーでは、今回の探検の記録は画面を閉じるまで残ります。</p>' : '') + '</section>';
+    }
+
+    function renderChallenge(root, regionId) {
+      const mission = missions.get(regionId);
+      if (!mission) { root.replaceChildren(); return; }
+      const region = regions.find(place => place.id === regionId);
+      const name = getSpecies(mission.target).name;
+      const earned = hasStamp(regionId);
+      root.innerHTML = '<section class="ex-challenge"><header class="ex-title"><h2>' +
+        app().icon('search',20) + ' ' + esc(region.name) + 'の植物調査</h2>' +
+        '<span data-ex-status>' + (earned ? 'スタンプ獲得ずみ' : '調査に挑戦') + '</span></header>' +
+        '<div data-ex-content></div></section>';
+      const content = root.querySelector('[data-ex-content]');
+
+      function showResult(fresh) {
+        const saved = !unsaved.has(prefix + 'stamp.' + regionId);
+        content.innerHTML = '<div class="ex-result"><div class="ex-result-picture ex-' + esc(regionId) + '">' +
+          app().art(mission.target,3) + '</div><div><h3 tabindex="-1">' +
+          (fresh ? '正解！ ' + esc(region.name) + 'の調査スタンプを獲得' : esc(region.name) + 'の調査を達成！') + '</h3>' +
+          '<p>' + esc(mission.answer) + '</p>' + (saved ? '' : '<p class="ex-storage-note">このスタンプは画面を閉じるまで残ります。</p>') +
+          '<div class="ex-result-actions"><button type="button" data-ex-care>' + app().icon('sprout',16) + ' ' +
+          esc(name) + (isGrown(mission.target) ? 'のおせわ' : 'を育てる') +
+          '</button><button type="button" data-ex-retry>もう一度とく</button></div></div></div>';
+        root.querySelector('[data-ex-status]').textContent = 'スタンプ獲得ずみ';
+        content.querySelector('[data-ex-care]').addEventListener('click', () => {
+          const plant = virtual().getPlants().find(item => item.species === mission.target);
+          if (plant) virtual().openPlant(plant.id);
+          else virtual().plant(mission.target);
+        });
+        content.querySelector('[data-ex-retry]').addEventListener('click', () => showQuestion(true));
+        if (fresh) content.querySelector('h3').focus({preventScroll:true});
+      }
+
+      function showQuestion(moveFocus) {
+        content.innerHTML = '<p class="ex-clue">' + esc(mission.clue) + '</p>' +
+          '<fieldset class="ex-options"><legend tabindex="-1">見つけた植物はどれ？</legend>' +
+          mission.choices.map(id => '<button type="button" data-ex-choice="' + esc(id) + '">' +
+            '<span class="ex-option-art">' + app().art(id,3) + '</span><span>' + esc(getSpecies(id).name) + '</span></button>').join('') +
+          '</fieldset><p class="ex-feedback" role="status"></p>';
+        const options = content.querySelector('.ex-options');
+        if (moveFocus) options.querySelector('legend').focus({preventScroll:true});
+        options.addEventListener('click', event => {
+          const button = event.target.closest('[data-ex-choice]');
+          if (!button || button.getAttribute('aria-disabled') === 'true') return;
+          const choice = button.dataset.exChoice;
+          if (choice !== mission.target) {
+            button.setAttribute('aria-disabled','true');
+            content.querySelector('.ex-feedback').textContent = getSpecies(choice).name + 'を選んだね。' + mission.hint;
+            return;
+          }
+          mark('stamp',regionId);
+          const passport = root.closest('[data-journey-root]')?.querySelector('[data-journey-passport]');
+          if (passport) renderPassport(passport);
+          showResult(true);
+        });
+      }
+
+      if (earned) showResult(false);
+      else showQuestion(false);
+    }
+
+    return {visit, hasVisited, isGrown, hasStamp, renderChallenge, renderPassport};
   }
 
-  window.GardenExploration = {visit, hasVisited, isGrown, hasStamp, renderChallenge, renderPassport};
+  window.createGardenJourney = createJourney;
+  window.GardenExploration = createJourney({
+    missions, regions:window.GardenRegions.regions, prefix:'kansatsu-garden.exploration.v1.', mapId:'atlas', unit:'地域'
+  });
 })();

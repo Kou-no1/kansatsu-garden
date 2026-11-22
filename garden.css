@@ -182,6 +182,10 @@ body.showing-dialog { overflow:hidden; }
 .hero-atlas-link { display:inline-flex; align-items:center; gap:7px; min-height:44px; padding:9px 13px; border:1px solid #bcc399; border-radius:11px; background:#fff9e8e8; color:#365738; font-size:14px; font-weight:750; text-decoration:none; }
 .hero-atlas-link:hover { background:#fffdf2; border-color:#7b936b; }
 .field-guide { text-decoration:none; }
+.map-switch { display:inline-flex; gap:3px; margin:0 0 16px; padding:3px; border:1px solid #cfd8c3; background:#ebeee2; border-radius:13px; }
+.map-switch a { display:inline-flex; align-items:center; justify-content:center; min-height:35px; min-width:98px; padding:5px 16px; border:1px solid transparent; border-radius:10px; color:#55664f; font-size:14px; font-weight:750; text-decoration:none; }
+.map-switch a[aria-current] { color:#305640; background:#fffef7; border-color:#cbd5bf; box-shadow:0 1px 3px #46533012; }
+.at-japan-link { display:inline-flex; gap:6px; align-items:center; padding:8px 0 2px; color:#3a6749; font-size:14px; font-weight:700; text-underline-offset:3px; }
 .field-guide .rare-place { max-width:60%; }
 .theme-rice,.theme-papyrus,.theme-giant-lily { --scene:#dfeee3; --grass:#c0d9c9; --tag:#35685a; }
 .theme-cherry,.theme-puya { --scene:#f5e3de; --grass:#e1c4bd; --tag:#87534d; }

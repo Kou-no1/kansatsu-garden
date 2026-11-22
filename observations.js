@@ -340,8 +340,9 @@
       const series = [{plant, entries: records}];
       if (peer) series.push({plant: peer, entries: data.entries.filter(entry => entry.plantId === peer.id)});
       const last = records[0];
-      const destination = window.GardenRegions.forSpecies(plant.species);
-      const mapLink = destination ? '<a class="ob-map-link" href="#atlas/' + esc(destination.region.id) + '/' + esc(plant.species) + '">' + icon('globe', 15) + ' この植物を世界地図で見る</a>' : '';
+      const mapLink = window.GardenMaps.placesFor(plant.species).map(({map,href}) =>
+        '<a class="ob-map-link" href="' + esc(href) + '">' + icon('globe',15) + ' この植物を' + map.name + 'で見る</a>'
+      ).join('');
       html += `<section class="ob-potbar"><label>${icon("sprout", 20)} 観察する鉢<select data-control="plant">${plants.map(p => `<option value="${esc(p.id)}"${p.id === plant.id ? " selected" : ""}>${esc(p.name)}（${conditions(p)}）</option>`).join("")}</select></label><button type="button" class="ob-outline" data-ob="plant">${icon("plus", 15)}鉢をふやす</button></section>
       <div class="ob-dashboard"><section class="ob-panel ob-graph-panel"><div class="ob-section-head"><h2>育ち方グラフ</h2>
       <div class="ob-segment" role="group" aria-label="グラフに表示するもの">${[["height", "草たけ"], ["leaves", "葉の数"]].map(([key, label]) => `<button type="button" data-metric="${key}" aria-pressed="${metric === key}">${label}</button>`).join("")}</div></div>
